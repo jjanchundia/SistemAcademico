@@ -1,0 +1,66 @@
+﻿@model SistemAcademico.Models.SeccionModel
+
+    <div class="row">
+        <div class="col-lg-12">
+            <label asp-for="Nombre" class="col-lg-3"></label>
+            <input asp-for="Nombre" class="form-control" />
+            <span asp-validation-for="Nombre" class="text-danger"></span>
+        </div>
+
+     </div>
+    
+    <div class="row">
+        <div class="col-lg-12">
+            <label asp-for="Descripcion" class="col-lg-3"></label>
+            <input asp-for="Descripcion" class="form-control" />
+            <span asp-validation-for="Descripcion" class="text-danger"></span>
+        </div>
+    </div>
+    
+    <div class="modal-footer">
+            <button class="btn btn-sm btn-success" id="btnActualizarSeccion">
+                <i class="glyphicon glyphicon-refresh"></i> Grabar
+            </button>
+            <button class="btn btn-sm btn-danger" id="btnCerrar" data-dismiss="modal" aria-hidden="true">
+                <i class="glyphicon glyphicon-remove"></i> Cerrar
+            </button>
+    </div>
+
+<script>
+
+    function modeloSeccion()
+    {
+        var modelo =
+        {
+            IdSeccion: $('#IdSeccion').val(),
+            Nombre: $('#Nombre').val(),
+            Descripcion: $('#Descripcion').val(),
+        };
+
+        return modelo;
+    }
+
+    $("#btnActualizarSeccion").click(function () {
+
+        var model = modeloSeccion();
+        $.ajax(
+            {
+                cache: false,
+                type: 'POST',
+                url: '@Url.Action("ActualizarSeccion", "Seccion")',
+                data: model,
+                success: function (data) {
+                    alert("Sección modificada");
+                    //$("#divListaArticulo").html('');
+                    //$("#divListaArticulo").html(data);
+                    //$("#btnCerrarModalCliente").click();
+                    //$("#btnConsultar").click();
+                },
+                error: function (xhr) {
+                    alert(xhr);
+                    return false;
+                }
+            });
+    });
+
+    </script>

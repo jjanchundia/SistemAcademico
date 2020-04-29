@@ -1,0 +1,27 @@
+﻿@model SistemAcademico.Models.CalificacionesModel
+
+    <div class="row">
+        <div class="col-lg-3">
+            <label class="control-label">Quimestre</label>
+            <input id="Quimestre" class="form-control" />
+        </div>
+        <div class="col-lg-3">
+            <label asp-for="IdCursoSeccion" class="control-label">Curso/Sección</label>
+            @Html.DropDownListFor(model => model.IdCursoSeccion, (SelectList)ViewBag.CursoSeccion, new { @class = "form-control chosen-select" })
+        </div>
+        <div class="col-lg-3">
+            <label asp-for="IdAsignatura" class="control-label">Asignatura</label>
+            @Html.DropDownListFor(model => model.IdAsignatura, (SelectList)ViewBag.Asignatura, new { @class = "form-control chosen-select" })
+        </div>
+        <div class="col-lg-3">
+            <button class="btn btn-lg btn-success" id="btnIngresarCalificacion">
+                <i class="glyphicon glyphicon-refresh"></i> Ingresar
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="editor-label col-lg-12">
+            @await Html.PartialAsync("ListaCalificaciones", Model.Detalle)
+        </div>
+    </div>

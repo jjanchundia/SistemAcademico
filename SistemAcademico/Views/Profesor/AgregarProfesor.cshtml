@@ -1,0 +1,144 @@
+﻿@model SistemAcademico.Models.ProfesorModel
+
+@*<h4>ProfesorModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AgregarProfesor">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="IdProfesor" class="control-label"></label>
+                <input asp-for="IdProfesor" class="form-control" />
+                <span asp-validation-for="IdProfesor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Nombres" class="control-label"></label>
+                <input asp-for="Nombres" class="form-control" />
+                <span asp-validation-for="Nombres" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Apellidos" class="control-label"></label>
+                <input asp-for="Apellidos" class="form-control" />
+                <span asp-validation-for="Apellidos" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Cedula" class="control-label"></label>
+                <input asp-for="Cedula" class="form-control" />
+                <span asp-validation-for="Cedula" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>*@
+
+@*<div>
+    <a asp-action="Index">Back to List</a>
+</div>*@
+
+
+            <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label asp-for="Cedula" class="control-label"></label>
+                            <input asp-for="Cedula" class="form-control" id="Cedula" />
+                        </div>
+
+                        <div class="col-md-5">
+                            <label asp-for="Nombres" class="control-label"></label>
+                            <input asp-for="Nombres" class="form-control" id="Nombres" />
+                        </div>
+
+                        <div class="col-md-5">
+                            <label asp-for="Apellidos" class="control-label"></label>
+                            <input asp-for="Apellidos" class="form-control" id="Apellidos" />
+                        </div>
+                    </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <label asp-for="Telefono" class="control-label"></label>
+                        <input asp-for="Telefono" id="Telefono" class="form-control" />
+                    </div>
+
+                    <div class="col-md-8">
+                        <label asp-for="Correo" class="control-label"></label>
+                        <input asp-for="Correo" id="Correo" class="form-control" />
+                    </div>    
+                    </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <label asp-for="Direccion" class="control-label"></label>
+                        <input asp-for="Direccion" id="Direccion" class="form-control" />
+                    </div>
+                </div>
+                </div>
+
+            <div class="col-md-12">
+                <button data-dismiss="modal" class="btn btn-default">Cancel</button>
+                <button type="submit" id="btnGrabarProfesor" class="btn btn-success">Guardar</button>
+            </div>
+
+<script>
+
+    function modeloProfesor()
+    {
+        var modelo =
+        {
+            Cedula: $('#Cedula').val(),
+            Nombres: $('#Nombres').val(),
+            Apellidos: $('#Apellidos').val(),
+            Telefono: $('#Telefono').val(),
+            Correo: $('#Correo').val(),
+            Direccion: $('#Direccion').val()
+        };
+        return modelo;
+    }
+
+    //function validarDatos() {
+    //    var model = modeloProfesor();
+    //    if (model.Nombres === "") {
+    //        alert("Ingrese Nombre");
+    //        return false;
+    //    }
+
+    //    if (model.Apellidos === "") {
+    //        alert("Ingrese Apellidos");
+    //        return false;
+    //    }
+
+    //    if (model.Cedula === "") {
+    //        alert("Ingrese Cedula");
+    //        return false;
+    //    }
+    //    return true;
+    //};
+
+    $("#btnGrabarProfesor").click(function () {
+        debugger
+        var model = modeloProfesor();
+
+        //datos = validarDatos();
+        //if (!datos) {
+        //    return false;
+        //}
+
+        $.ajax(
+            {
+                cache: false,
+                type: 'POST',
+                url: '@Url.Action("GrabarProfesor", "Profesor")',
+                data: model,
+                success: function () {
+                    alert("Profesor Agregado");
+                    $("#btnCerrarModaCliente").click();
+                    $("#btnConsultar").click();
+                },
+                error: function (xhr) {
+                    alert("No se puede agregar, ya existe este número de cedula");
+                }
+            });
+    });
+</script>

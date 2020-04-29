@@ -1,0 +1,64 @@
+﻿@model SistemAcademico.Models.CursoModel
+
+<div class="row">
+    <div class="col-lg-12">
+        <label asp-for="Nombre" class="col-lg-4"></label>
+        <input asp-for="Nombre" class="form-control" />
+        <span asp-validation-for="Nombre" class="text-danger"></span>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <label asp-for="Descripcion" class="col-lg-4"></label>
+        <input asp-for="Descripcion" class="form-control" />
+        <span asp-validation-for="Descripcion" class="text-danger"></span>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-sm btn-success" id="btnActualizarCurso">
+        <i class="glyphicon glyphicon-refresh"></i> Grabar
+    </button>
+    <button class="btn btn-sm btn-danger" id="btnCerrar" data-dismiss="modal" aria-hidden="true">
+        <i class="glyphicon glyphicon-remove"></i> Cerrar
+    </button>
+</div>
+
+<script>
+
+    function modeloCurso()
+    {
+        var modelo =
+        {
+            IdCurso: '@Model.IdCurso',
+            Nombre: $('#Nombre').val(),
+            Descripcion: $('#Descripcion').val(),
+        };
+        return modelo;
+    }
+
+    $("#btnActualizarCurso").click(function () {
+        debugger
+        var model = modeloCurso();
+        $.ajax(
+            {
+                cache: false,
+                type: 'POST',
+                url: '@Url.Action("ActualizarCurso", "Curso")',
+                data: model,
+                success: function (data) {
+                    alert("Curso modificado");
+                    //$("#divListaArticulo").html('');
+                    //$("#divListaArticulo").html(data);
+                    //$("#btnCerrarModalCliente").click();
+                    //$("#btnConsultar").click();
+                },
+                error: function (xhr) {
+                    alert(xhr);
+                    return false;
+                }
+            });
+    });
+
+</script>

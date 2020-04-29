@@ -1,0 +1,76 @@
+﻿@model SistemAcademico.Models.AsignaturaModel
+
+<div class="row">
+    <div class="col-lg-3">
+        <label asp-for="Nombre" class="col-lg-4"></label>
+        <input asp-for="Nombre" class="form-control" />
+        <span asp-validation-for="Nombre" class="text-danger"></span>
+    </div>
+
+    @*<div class="col-lg-3">
+        <label class="col-lg-3">Profesor</label>
+        @Html.DropDownListFor(model => model.IdProfesor, (SelectList)ViewBag.Profesor, new { @class = "form-control chosen-select" })
+        <span asp-validation-for="IdProfesor" class="text-danger"></span>
+    </div>
+
+    <div class="col-lg-3">
+        <label class="col-lg-3">Curso</label>
+        @Html.DropDownListFor(model => model.IdCurso, (SelectList)ViewBag.Curso, new { @class = "form-control chosen-select" })
+        <span asp-validation-for="IdCurso" class="text-danger"></span>
+    </div>*@
+
+    <div class="col-lg-3">
+            <label asp-for="Descripcion" class="col-lg-4"></label>
+            <input asp-for="Descripcion" class="form-control" />
+            <span asp-validation-for="Descripcion" class="text-danger"></span>
+    </div>
+
+    <div class="modal-footer">
+            <button class="btn btn-sm btn-success" id="btnActualizarSeccion">
+                <i class="glyphicon glyphicon-refresh"></i> Grabar
+            </button>
+            <button class="btn btn-sm btn-danger" id="btnCerrar" data-dismiss="modal" aria-hidden="true">
+                <i class="glyphicon glyphicon-remove"></i> Cerrar
+            </button>
+    </div>
+</div>
+
+<script>
+
+    function modeloAsignatura() {
+
+        var modelo =
+        {
+            IdAsignatura: $('#IdAsignatura').val(),
+            Nombre: $('#Nombre').val(),
+            Descripcion: $('#Descripcion').val(),
+        };
+
+        return modelo;
+    }
+
+    $("#btnActualizarAsignatura").click(function () {
+
+        var model = modeloAsignatura();
+
+        $.ajax(
+            {
+                cache: false,
+                type: 'POST',
+                url: '@Url.Action("ActualizarAsignatura", "Asignatura")',
+                data: model,
+                success: function (data) {
+                    alert("Asignatura modificada");
+                    //$("#divListaArticulo").html('');
+                    //$("#divListaArticulo").html(data);
+                    //$("#btnCerrarModalCliente").click();
+                    //$("#btnConsultar").click();
+                },
+                error: function (xhr) {
+                    alert(xhr);
+                    return false;
+                }
+            });
+    });
+
+</script>

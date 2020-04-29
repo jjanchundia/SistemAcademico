@@ -1,0 +1,196 @@
+﻿<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+@model IEnumerable<SistemAcademico.Models.AsignaturaModel>
+
+<div class="editor-field col-lg-2">
+    <button id="btnAgregarAsignatura" type="submit" class="btn btn-primary" data-toggle="modal" data-target="#ModalAgregarAsignatura">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Agregar
+    </button>
+</div>
+
+<table class="table" id="tblAsignaturas">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Descripcion)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Descripcion)
+                </td>
+                <td>
+                    <button class="btn btn-xs btn-primary"
+                            id="btnEditarAsignatura"
+                            data-prop="@item.IdAsignatura"
+                            data-tooltip="tooltip"
+                            title="Editar Asignatura!"
+                            data-placement="top"
+                            data-toggle="modal"
+                            data-target="#ModalEditarAsignatura">
+                        Editar
+                    </button>
+
+                    <button class="btn btn-xs btn-danger"
+                            id="btnEliminarAsignatura"
+                            data-prop="@item.IdAsignatura"
+                            data-tooltip="tooltip"
+                            data-placement="top"
+                            title="Eliminar Asignatura!">
+                        Eliminar
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="ModalAgregarAsignatura" tabindex="-1" role="dialog" aria-labelledby="myModalAgregarAsignatura">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="myModalAgregarAsignatura">Agregar Asignatura</h4>
+            </div>
+            <div id="divAgregarAsignatura">
+                <div class="modal-body-trans">
+                    Cargando...
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModalEditarAsignatura" tabindex="-1" role="dialog" aria-labelledby="myModalEditarAsignatura">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="myModalEditarAsignatura">Editar Asignatura</h4>
+            </div>
+            <div id="divEditarAsignatura">
+                <div class="modal-body-trans">
+                    Cargando...
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $("#btnAgregarAsignatura").click(function () {
+        $.ajax(
+            {
+                cache: false,
+                type: 'GET',
+                url: '@Url.Action("AgregarAsignatura", "Asignatura")',
+                success: function (data) {
+                    $("#divAgregarAsignatura").html('');
+                    $("#divAgregarAsignatura").html(data);
+                },
+                error: function (xhr) {
+                    alert(xhr);
+                    return false;
+                },
+                complete: function () {
+                },
+                beforeSend: function () {
+                }
+            });
+    });
+
+    $("#tblAsignaturas").on("click", "#btnEditarAsignatura", function ()
+    {
+        var idAsignaturas = $(this).attr('data-prop');
+        var parametro = { idAsignatura: idAsignaturas };
+            $.ajax(
+                {
+                    cache: false,
+                    type: 'GET',
+                    url: '@Url.Action("EditarAsignatura", "Asignatura")',
+                    data: parametro,
+                    success: function (data) {
+                        $("#divEditarAsignatura").html('');
+                        $("#divEditarAsignatura").html(data);
+                    },
+                    error: function (xhr) {
+                        alert(xhr);
+                        return false;
+                    },
+                    complete: function () {
+                    },
+                    beforeSend: function () {
+                    }
+                });
+    });
+
+    $("#tblAsignaturas").on("click", "#btnEliminarAsignatura", function ()
+    {
+        var prop = $(this).attr('data-prop');
+        var datos = prop.split(',');
+            $.ajax(
+                {
+                    cache: false,
+                    type: 'GET',
+                    url: '@Url.Action("EliminarAsignatura", "Asignatura")',
+                    data: {
+                        "idAsignatura": datos[0]
+                    },
+                    success: function (data) {
+                        alert("Eliminado correctamente");
+                        //$("#btnConsultar").click();
+                    },
+                    error: function (xhr) {
+                        alert(xhr);
+                        return false;
+                    },
+                    complete: function () {
+                    },
+                    beforeSend: function () {
+                    }
+                });
+    });
+
+    //$(document).ready(function () {
+    //    $('#tblBodega').DataTable({
+    //        "autoWidth": true,
+    //        "searching": true,
+    //        "pagingType": "full_numbers",
+    //        "lengthMenu": [[5, 10, 15, -1], [5, 10, 15, "Todos"]],
+    //        "language": {
+    //            "sProcessing": "Procesando...",
+    //            "sLengthMenu": "_MENU_ registros por página",
+    //            "sZeroRecords": "No se encontraron resultados",
+    //            "sEmptyTable": "Ningún dato disponible en esta tabla",
+    //            "sInfo": "_END_ de _TOTAL_ registros",
+    //            "sInfoEmpty": "Mostrando 0 registros",
+    //            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+    //            "sSearch": "Buscar:",
+    //            "sInfoThousands": ",",
+    //            "sLoadingRecords": "Cargando...",
+    //            "oPaginate": {
+    //                "sFirst": "<<",
+    //                "sLast": ">>",
+    //                "sNext": ">",
+    //                "sPrevious": "<"
+    //            },
+    //            "oAria": {
+    //                "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+    //                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+    //            }
+    //        }
+    //    });
+    //});
+</script>

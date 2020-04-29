@@ -1,0 +1,203 @@
+﻿<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+@model IEnumerable<SistemAcademico.Models.CursoModel>
+
+@{
+    ViewData["Title"] = "MantenimientoCurso";
+}
+
+<h1>Mantenimiento de Cursos</h1>
+
+<div class="editor-field col-lg-2">
+    <button id="btnAgregarCurso" type="submit" class="btn btn-primary" data-toggle="modal" data-target="#ModalAgregarCurso">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Agregar
+    </button>
+</div>
+
+<table class="table" id="tblCursos">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Descripcion)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Descripcion)
+                </td>
+                <td>
+                    <button class="btn btn-xs btn-primary"
+                            id="btnEditarCurso"
+                            data-prop="@item.IdCurso"
+                            data-tooltip="tooltip"
+                            title="Editar Sección!"
+                            data-placement="top"
+                            data-toggle="modal"
+                            data-target="#ModalEditarCurso">
+                        Editar
+                    </button>
+
+                    <button class="btn btn-xs btn-danger"
+                            id="btnEliminarCurso"
+                            data-prop="@item.IdCurso"
+                            data-tooltip="tooltip"
+                            data-placement="top"
+                            title="Eliminar Sección!">
+                        Eliminar
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="ModalAgregarCurso" tabindex="-1" role="dialog" aria-labelledby="myModalAgregarCurso">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="myModalAgregarCurso">Agregar Curso</h4>
+            </div>
+            <div id="divAgregarCurso">
+                <div class="modal-body-trans">
+                    Cargando...
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModalEditarCurso" tabindex="-1" role="dialog" aria-labelledby="myModalEditarCurso">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="myModalEditarCurso">Editar Curso</h4>
+            </div>
+            <div id="divEditarCurso">
+                <div class="modal-body-trans">
+                    Cargando...
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    $("#btnAgregarCurso").click(function () {
+        $.ajax(
+            {
+                cache: false,
+                type: 'GET',
+                url: '@Url.Action("AgregarCurso", "Curso")',
+                success: function (data) {
+                    $("#divAgregarCurso").html('');
+                    $("#divAgregarCurso").html(data);
+                },
+                error: function (xhr) {
+                    alert(xhr);
+                    return false;
+                },
+                complete: function () {
+                },
+                beforeSend: function () {
+                }
+            });
+    });
+
+    $("#tblCursos").on("click", "#btnEditarCurso", function ()
+    {
+        var idCurso = $(this).attr('data-prop');
+        var parametro = { idCurso: idCurso };
+            $.ajax(
+                {
+                    cache: false,
+                    type: 'GET',
+                    url: '@Url.Action("EditarCurso", "Curso")',
+                    data: parametro,
+                    success: function (data) {
+                        $("#divEditarCurso").html('');
+                        $("#divEditarCurso").html(data);
+                    },
+                    error: function (xhr) {
+                        alert(xhr);
+                        return false;
+                    },
+                    complete: function () {
+                    },
+                    beforeSend: function () {
+                    }
+                });
+    });
+
+    $("#tblCursos").on("click", "#btnEliminarCurso", function ()
+    {
+        var prop = $(this).attr('data-prop');
+        var datos = prop.split(',');
+            $.ajax(
+                {
+                    cache: false,
+                    type: 'GET',
+                    url: '@Url.Action("EliminarCurso", "Curso")',
+                    data: {
+                        "idCurso": datos[0]
+                    },
+                    success: function (data) {
+                        alert("Eliminado correctamente");
+                        //$("#btnConsultar").click();
+                    },
+                    error: function (xhr) {
+                        alert(xhr);
+                        return false;
+                    },
+                    complete: function () {
+                    },
+                    beforeSend: function () {
+                    }
+                });
+    });
+
+    //$(document).ready(function () {
+    //    $('#tblBodega').DataTable({
+    //        "autoWidth": true,
+    //        "searching": true,
+    //        "pagingType": "full_numbers",
+    //        "lengthMenu": [[5, 10, 15, -1], [5, 10, 15, "Todos"]],
+    //        "language": {
+    //            "sProcessing": "Procesando...",
+    //            "sLengthMenu": "_MENU_ registros por página",
+    //            "sZeroRecords": "No se encontraron resultados",
+    //            "sEmptyTable": "Ningún dato disponible en esta tabla",
+    //            "sInfo": "_END_ de _TOTAL_ registros",
+    //            "sInfoEmpty": "Mostrando 0 registros",
+    //            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+    //            "sSearch": "Buscar:",
+    //            "sInfoThousands": ",",
+    //            "sLoadingRecords": "Cargando...",
+    //            "oPaginate": {
+    //                "sFirst": "<<",
+    //                "sLast": ">>",
+    //                "sNext": ">",
+    //                "sPrevious": "<"
+    //            },
+    //            "oAria": {
+    //                "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+    //                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+    //            }
+    //        }
+    //    });
+    //});
+</script>

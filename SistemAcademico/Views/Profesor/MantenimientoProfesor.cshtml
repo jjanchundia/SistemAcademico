@@ -1,0 +1,209 @@
+﻿<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+@model IEnumerable<SistemAcademico.Models.ProfesorModel>
+
+@{
+    ViewData["Title"] = "MantenimientoProfesor";
+}
+
+<h1>Mantenimiento de Profesor</h1>
+
+<div class="editor-field col-lg-2">
+    <button id="btnAgregarProfesor" type="submit" class="btn btn-primary" data-toggle="modal" data-target="#ModalAgregarProfesor">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Agregar
+    </button>
+</div>
+
+<table class="table" id="tblProfesores">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombres)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Apellidos)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cedula)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombres)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Apellidos)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cedula)
+                </td>
+                <td>
+                    <button class="btn btn-xs btn-primary"
+                            id="btnEditarProfesor"
+                            data-prop="@item.IdProfesor"
+                            data-tooltip="tooltip"
+                            title="Editar Sección!"
+                            data-placement="top"
+                            data-toggle="modal"
+                            data-target="#ModalEditarProfesor">
+                        Editar
+                    </button>
+
+                    <button class="btn btn-xs btn-danger"
+                            id="btnEliminarProfesor"
+                            data-prop="@item.IdProfesor"
+                            data-tooltip="tooltip"
+                            data-placement="top"
+                            title="Eliminar Sección!">
+                        Eliminar
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="ModalAgregarProfesor" tabindex="-1" role="dialog" aria-labelledby="myModalAgregarProfesor">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="myModalAgregarProfesor">Agregar Profesor</h4>
+            </div>
+            <div id="divAgregarProfesor">
+                <div class="modal-body-trans">
+                    Cargando...
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModalEditarProfesor" tabindex="-1" role="dialog" aria-labelledby="myModalEditarProfesor">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="myModalEditarProfesor">Editar Profesor</h4>
+            </div>
+            <div id="divEditarProfesor">
+                <div class="modal-body-trans">
+                    Cargando...
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    $("#btnAgregarProfesor").click(function () {
+        $.ajax(
+            {
+                cache: false,
+                type: 'GET',
+                url: '@Url.Action("AgregarProfesor", "Profesor")',
+                success: function (data) {
+                    $("#divAgregarProfesor").html('');
+                    $("#divAgregarProfesor").html(data);
+                },
+                error: function (xhr) {
+                    alert(xhr);
+                    return false;
+                },
+                complete: function () {
+                },
+                beforeSend: function () {
+                }
+            });
+    });
+
+    $("#tblProfesores").on("click", "#btnEditarProfesor", function ()
+    {
+        var idProfesores = $(this).attr('data-prop');
+        var parametro = { idProfesor: idProfesores };
+            $.ajax(
+                {
+                    cache: false,
+                    type: 'GET',
+                    url: '@Url.Action("EditarProfesor", "Profesor")',
+                    data: parametro,
+                    success: function (data) {
+                        $("#divEditarProfesor").html('');
+                        $("#divEditarProfesor").html(data);
+                    },
+                    error: function (xhr) {
+                        alert(xhr);
+                        return false;
+                    },
+                    complete: function () {
+                    },
+                    beforeSend: function () {
+                    }
+                });
+    });
+
+    $("#tblProfesores").on("click", "#btnEliminarProfesor", function ()
+    {
+        var prop = $(this).attr('data-prop');
+        var datos = prop.split(',');
+            $.ajax(
+                {
+                    cache: false,
+                    type: 'GET',
+                    url: '@Url.Action("EliminarProfesor", "Profesor")',
+                    data: {
+                        "idProfesor": datos[0]
+                    },
+                    success: function (data) {
+                        alert("Eliminado correctamente");
+                        //$("#btnConsultar").click();
+                    },
+                    error: function (xhr) {
+                        alert(xhr);
+                        return false;
+                    },
+                    complete: function () {
+                    },
+                    beforeSend: function () {
+                    }
+                });
+    });
+
+    //$(document).ready(function () {
+    //    $('#tblBodega').DataTable({
+    //        "autoWidth": true,
+    //        "searching": true,
+    //        "pagingType": "full_numbers",
+    //        "lengthMenu": [[5, 10, 15, -1], [5, 10, 15, "Todos"]],
+    //        "language": {
+    //            "sProcessing": "Procesando...",
+    //            "sLengthMenu": "_MENU_ registros por página",
+    //            "sZeroRecords": "No se encontraron resultados",
+    //            "sEmptyTable": "Ningún dato disponible en esta tabla",
+    //            "sInfo": "_END_ de _TOTAL_ registros",
+    //            "sInfoEmpty": "Mostrando 0 registros",
+    //            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+    //            "sSearch": "Buscar:",
+    //            "sInfoThousands": ",",
+    //            "sLoadingRecords": "Cargando...",
+    //            "oPaginate": {
+    //                "sFirst": "<<",
+    //                "sLast": ">>",
+    //                "sNext": ">",
+    //                "sPrevious": "<"
+    //            },
+    //            "oAria": {
+    //                "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+    //                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+    //            }
+    //        }
+    //    });
+    //});
+</script>

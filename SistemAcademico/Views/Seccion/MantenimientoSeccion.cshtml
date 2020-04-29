@@ -1,0 +1,205 @@
+﻿<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+@model IEnumerable<SistemAcademico.Models.SeccionModel>
+
+<h1>Mantenimiento de Secciones</h1>
+
+<div class="editor-field col-lg-2">
+    <button id="btnAgregarSeccion" type="submit" class="btn btn-primary" data-toggle="modal" data-target="#ModalAgregarSeccion">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Agregar
+    </button>
+</div>
+
+<table class="table" id="tblSeccion">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IdCurso)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdCurso)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NombreProfesor)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Descripcion)
+                </td>
+                <td>
+                    <button class="btn btn-xs btn-primary"
+                            id="btnEditarSeccion"
+                            data-prop="@item.IdSeccion"
+                            data-tooltip="tooltip"
+                            title="Editar Sección!"
+                            data-placement="top"
+                            data-toggle="modal"
+                            data-target="#ModalEditarSeccion">
+                        Editar
+                    </button>
+
+                    <button class="btn btn-xs btn-danger"
+                            id="btnEliminarSeccion"
+                            data-prop="@item.IdSeccion"
+                            data-tooltip="tooltip"
+                            data-placement="top"
+                            title="Eliminar Sección!">
+                        Eliminar
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="ModalAgregarSeccion" tabindex="-1" role="dialog" aria-labelledby="myModalAgregarSeccion">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="myModalAgregarSeccion">Agregar Sección</h4>
+            </div>
+            <div id="divAgregarSeccion">
+                <div class="modal-body-trans">
+                    Cargando...
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModalEditarSeccion" tabindex="-1" role="dialog" aria-labelledby="myModalEditarSeccion">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="myModalEditarSeccion">Editar Sección</h4>
+            </div>
+            <div id="divEditarSeccion">
+                <div class="modal-body-trans">
+                    Cargando...
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    $("#btnAgregarSeccion").click(function () {
+        $.ajax(
+            {
+                cache: false,
+                type: 'GET',
+                url: '@Url.Action("AgregarSeccion", "Seccion")',
+                success: function (data) {
+                    $("#divAgregarSeccion").html('');
+                    $("#divAgregarSeccion").html(data);
+                },
+                error: function (xhr) {
+                    alert(xhr);
+                    return false;
+                },
+                complete: function () {
+                },
+                beforeSend: function () {
+                }
+            });
+    });
+
+    $("#tblSeccion").on("click", "#btnEditarSeccion", function ()
+    {
+        var idSecciones = $(this).attr('data-prop');
+        var parametro = { idSeccion: idSecciones};
+            $.ajax(
+                {
+                    cache: false,
+                    type: 'GET',
+                    url: '@Url.Action("EditarSeccion", "Seccion")',
+                    data: parametro,
+                    success: function (data) {
+                        $("#divEditarSeccion").html('');
+                        $("#divEditarSeccion").html(data);
+                    },
+                    error: function (xhr) {
+                        alert(xhr);
+                        return false;
+                    },
+                    complete: function () {
+                    },
+                    beforeSend: function () {
+                    }
+                });
+    });
+
+    $("#tblSeccion").on("click", "#btnEliminarSeccion", function ()
+    {
+        var prop = $(this).attr('data-prop');
+        var datos = prop.split(',');
+            $.ajax(
+                {
+                    cache: false,
+                    type: 'GET',
+                    url: '@Url.Action("EliminarSeccion", "Seccion")',
+                    data: {
+                        "idSeccion": datos[0]
+                    },
+                    success: function (data) {
+                        alert("Eliminado correctamente");
+                        //$("#btnConsultar").click();
+                    },
+                    error: function (xhr) {
+                        alert(xhr);
+                        return false;
+                    },
+                    complete: function () {
+                    },
+                    beforeSend: function () {
+                    }
+                });
+    });
+
+    //$(document).ready(function () {
+    //    $('#tblBodega').DataTable({
+    //        "autoWidth": true,
+    //        "searching": true,
+    //        "pagingType": "full_numbers",
+    //        "lengthMenu": [[5, 10, 15, -1], [5, 10, 15, "Todos"]],
+    //        "language": {
+    //            "sProcessing": "Procesando...",
+    //            "sLengthMenu": "_MENU_ registros por página",
+    //            "sZeroRecords": "No se encontraron resultados",
+    //            "sEmptyTable": "Ningún dato disponible en esta tabla",
+    //            "sInfo": "_END_ de _TOTAL_ registros",
+    //            "sInfoEmpty": "Mostrando 0 registros",
+    //            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+    //            "sSearch": "Buscar:",
+    //            "sInfoThousands": ",",
+    //            "sLoadingRecords": "Cargando...",
+    //            "oPaginate": {
+    //                "sFirst": "<<",
+    //                "sLast": ">>",
+    //                "sNext": ">",
+    //                "sPrevious": "<"
+    //            },
+    //            "oAria": {
+    //                "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+    //                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+    //            }
+    //        }
+    //    });
+    //});
+</script>

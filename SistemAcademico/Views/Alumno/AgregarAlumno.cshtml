@@ -1,0 +1,112 @@
+﻿@model SistemAcademico.Models.AlumnoModel
+
+    <div class="row">
+        <div class="col-md-2">
+            <label asp-for="Cedula" class="control-label"></label>
+            <input asp-for="Cedula" id="Cedula" class="form-control" />
+        </div>
+
+        <div class="col-md-5">
+            <label asp-for="Nombres" class="control-label"></label>
+            <input asp-for="Nombres" id="Nombres" class="form-control" />
+        </div>
+
+        <div class="col-md-5">
+            <label asp-for="Apellidos" class="control-label"></label>
+            <input asp-for="Apellidos" id="Apellidos" class="form-control" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <label asp-for="Telefono" class="control-label"></label>
+            <input asp-for="Telefono" id="Telefono" class="form-control" />
+        </div>
+
+        <div class="col-md-8">
+            <label asp-for="Correo" class="control-label"></label>
+            <input asp-for="Correo" id="Correo" class="form-control" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2">
+            <label asp-for="IdCursoSeccion" class="control-label">Curso/Sección</label>
+            @Html.DropDownListFor(model => model.IdCursoSeccion, (SelectList)ViewBag.CursoSeccion, new { @class = "form-control chosen-select" })
+        </div>
+        <div class="col-md-10">
+            <label asp-for="Direccion" class="control-label"></label>
+            <input asp-for="Direccion" id="Direccion" class="form-control" />
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-sm btn-success" id="btnGrabarAlumno">
+            <i class="glyphicon glyphicon-refresh"></i> Grabar
+        </button>
+        <button class="btn btn-sm btn-danger" id="btnCerrar" data-dismiss="modal" aria-hidden="true">
+            <i class="glyphicon glyphicon-remove"></i> Cerrar
+        </button>
+    </div>
+            
+<script>
+    function modeloAlumno()
+    {
+        var modelo =
+        {
+            Cedula: $('#Cedula').val(),
+            Nombres: $('#Nombres').val(),
+            Apellidos: $('#Apellidos').val(),
+            Telefono: $('#Telefono').val(),
+            Correo: $('#Correo').val(),
+            IdCursoSeccion: $('#IdCursoSeccion').val(),
+            Direccion: $('#Direccion').val(),
+        };
+        return modelo;
+    }
+
+    //function validarDatos() {
+    //    var model = modeloProfesor();
+    //    if (model.Nombres === "") {
+    //        alert("Ingrese Nombre");
+    //        return false;
+    //    }
+
+    //    if (model.Apellidos === "") {
+    //        alert("Ingrese Apellidos");
+    //        return false;
+    //    }
+
+    //    if (model.Cedula === "") {
+    //        alert("Ingrese Cedula");
+    //        return false;
+    //    }
+    //    return true;
+    //};
+
+    $("#btnGrabarAlumno").click(function () {
+        debugger
+        var model = modeloAlumno();
+
+        //datos = validarDatos();
+        //if (!datos) {
+        //    return false;
+        //}
+
+        $.ajax(
+            {
+                cache: false,
+                type: 'POST',
+                url: '@Url.Action("GrabarAlumno", "Alumno")',
+                data: model,
+                success: function () {
+                    alert("Alumno Agregado");
+                    //$("#btnCerrarModaCliente").click();
+                    //$("#btnConsultar").click();
+                },
+                error: function (xhr) {
+                    //alert("No se puede agregar, ya existe este número de cedula");
+                }
+            });
+    });
+</script>

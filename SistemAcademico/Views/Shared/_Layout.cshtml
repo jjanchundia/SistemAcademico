@@ -1,0 +1,103 @@
+﻿@using SistemAcademico.Models;
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SistemAcademico</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                @*<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">SistemAcademico</a>*@
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                @{
+            @using Microsoft.AspNetCore.Mvc;
+            @using Microsoft.AspNetCore.Http;
+            @using Newtonsoft.Json;
+            @using System.Linq;
+            @using System.Collections.Generic;
+        }
+
+        @if (Model != null)
+        {
+            @*@Context.Session.GetString("Menu");*@
+            //var sesionMenu = JsonConvert.DeserializeObject<List<MenuModel>>(@Context.Session.GetString("Menu"));
+            @foreach (MenuModel item in JsonConvert.DeserializeObject<List<MenuModel>>(@Context.Session.GetString("Menu")))
+            {
+                @Html.ActionLink(item.Mensaje, item.NombreAccion, item.NombreController, new { area = "" }, new { @class = "navbar-brand" })
+            }
+
+            @Html.ActionLink("Cerrar Session", "CerrarSession", "Login", new { area = "" }, new { @class = "navbar-brand" })
+        }
+
+                @*@if (Model != null)
+                {
+                    @foreach (MenuModel item in TempData["Menu"] as List<MenuModel>) 
+                    {
+                        @Html.ActionLink(item.Mensaje, item.NombreAccion, item.NombreController, new { area = "" }, new { @class = "navbar-brand" })
+                    }
+
+                    @Html.ActionLink("Cerrar Session", "CerrarSession", "Login", new { area = "" }, new { @class = "navbar-brand" })
+                }*@
+
+
+            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                @*<ul class="navbar-nav flex-grow-1"> (@ViewBag.Menu))s
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Profesor" asp-action="MantenimientoProfesor">Profesores</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Alumno" asp-action="MantenimientoAlumno">Estudiantes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Curso" asp-action="MantenimientoCurso">Cursos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Seccion" asp-action="MantenimientoSeccion">Seccion</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="CursoSeccion" asp-action="MantenimientoCursoSeccion">Curso/Seccion</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Asignatura" asp-action="MantenimientoAsignatura">Asignatura</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Calificaciones" asp-action="Calificaciones">Calificaciones</a>
+            </li>
+        </ul>*@
+            </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2020 - SistemAcademico - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

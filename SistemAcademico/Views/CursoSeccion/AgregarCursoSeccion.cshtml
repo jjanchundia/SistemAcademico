@@ -1,0 +1,84 @@
+﻿@model SistemAcademico.Models.CursoSeccionModel
+
+
+    <div class="row">
+        <div class="col-lg-12">
+            <label asp-for="IdCurso" class="control-label">Curso</label>
+            @Html.DropDownListFor(model => model.IdCurso, (SelectList)ViewBag.Curso, new { @class = "form-control chosen-select" })
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <label asp-for="IdSeccion" class="control-label">Sección</label>
+            @Html.DropDownListFor(model => model.IdSeccion, (SelectList)ViewBag.Seccion, new { @class = "form-control chosen-select" })
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-sm btn-success" id="btnGrabarCursoSeccion">
+            <i class="glyphicon glyphicon-refresh"></i> Grabar
+        </button>
+        <button class="btn btn-sm btn-danger" id="btnCerrar" data-dismiss="modal" aria-hidden="true">
+            <i class="glyphicon glyphicon-remove"></i> Cerrar
+        </button>
+    </div>
+
+<script>
+
+    function modeloCursoSeccion()
+    {
+        var modelo =
+        {
+            IdCurso: $('#IdCurso').val(),
+            IdSeccion: $('#IdSeccion').val(),
+        };
+        return modelo;
+    }
+
+    //function validarDatos() {
+    //    var model = modeloProfesor();
+    //    if (model.Nombres === "") {
+    //        alert("Ingrese Nombre");
+    //        return false;
+    //    }
+
+    //    if (model.Apellidos === "") {
+    //        alert("Ingrese Apellidos");
+    //        return false;
+    //    }
+
+    //    if (model.Cedula === "") {
+    //        alert("Ingrese Cedula");
+    //        return false;
+    //    }
+    //    return true;
+    //};
+
+    $("#btnGrabarCursoSeccion").click(function () {
+
+        var model = modeloCursoSeccion();
+
+        //datos = validarDatos();
+        //if (!datos) {
+        //    return false;
+        //}
+
+        $.ajax(
+            {
+                cache: false,
+                type: 'POST',
+                url: '@Url.Action("GrabarCursoSeccion", "CursoSeccion")',
+                data: model,
+                success: function () {
+                    alert("Curso/Seccion Agregado");
+                    //$("#btnCerrarModaCliente").click();
+                    //$("#btnConsultar").click();
+                },
+                error: function (xhr) {
+                    //alert("No se puede agregar, ya existe este número de cedula");
+                }
+            });
+    });
+
+</script>  

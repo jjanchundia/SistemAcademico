@@ -1,0 +1,90 @@
+﻿@model IEnumerable<SistemAcademico.Models.CalificacionesDetalleModel>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Nombre Alumno")
+            </th>
+            <th>
+                @Html.DisplayName("Nota 1")
+            </th>
+            <th>
+                @Html.DisplayName("Nota 2")
+            </th>
+            <th>
+                @Html.DisplayName("Nota 3")
+            </th>
+            <th>
+                @Html.DisplayName("Prom")
+            </th>
+            <th>
+                @Html.DisplayName("Prom 80%")
+            </th>
+            <th>
+                @Html.DisplayName("Exa")
+            </th>
+            <th>
+                @Html.DisplayName("Exam 20%")
+            </th>
+            <th>
+                @Html.DisplayName("Quimestre 1")
+            </th>
+            <th>
+                @Html.DisplayName("Quimestre 2")
+            </th>
+            <th>
+                @Html.DisplayName("Promedio Final")
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    @if (Model != null)
+    {
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NombreAlumno)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nota1)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nota2)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nota3)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Prom1)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PromOchentaPorCiento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Examen)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ExamenVeintePorCiento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quimestre1)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quimestre2)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PromedioFinal)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
+        }
+    </tbody>
+    }
+</table>

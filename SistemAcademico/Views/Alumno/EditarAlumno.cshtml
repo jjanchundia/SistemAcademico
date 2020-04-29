@@ -1,0 +1,92 @@
+﻿@model SistemAcademico.Models.AlumnoModel
+
+    <div class="row">
+        <div class="col-md-2">
+            <label asp-for="Cedula" class="control-label"></label>
+            <input asp-for="Cedula" id="Cedula" class="form-control" />
+        </div>
+
+        <div class="col-md-5">
+            <label asp-for="Nombres" class="control-label"></label>
+            <input asp-for="Nombres" id="Nombres" class="form-control" />
+        </div>
+
+        <div class="col-md-5">
+            <label asp-for="Apellidos" class="control-label"></label>
+            <input asp-for="Apellidos" id="Apellidos" class="form-control" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <label asp-for="Telefono" class="control-label"></label>
+            <input asp-for="Telefono" id="Telefono" class="form-control" />
+        </div>
+
+        <div class="col-md-8">
+            <label asp-for="Correo" class="control-label"></label>
+            <input asp-for="Correo" id="Correo" class="form-control" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2">
+            <label asp-for="IdCursoSeccion" class="control-label"></label>
+            <input asp-for="IdCursoSeccion" id="Direccion" class="form-control" />
+        </div>
+        <div class="col-md-12">
+            <label asp-for="Direccion" class="control-label"></label>
+            <input asp-for="Direccion" id="Direccion" class="form-control" />
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-sm btn-success" id="btnActualizarAlumno">
+            <i class="glyphicon glyphicon-refresh"></i> Grabar
+        </button>
+        <button class="btn btn-sm btn-danger" id="btnCerrar" data-dismiss="modal" aria-hidden="true">
+            <i class="glyphicon glyphicon-remove"></i> Cerrar
+        </button>
+    </div>
+
+<script>
+
+    function modeloAlumno()
+    {
+        var modelo =
+        {
+            IdAlumno: '@Model.IdAlumno',
+            Cedula: $('#Cedula').val(),
+            Nombres: $('#Nombres').val(),
+            Apellidos: $('#Apellidos').val(),
+            Telefono: $('#Telefono').val(),
+            Correo: $('#Correo').val(),
+            IdCursoSeccion: $('#IdCursoSeccion').val(),
+            Direccion: $('#Direccion').val(),
+        };
+        return modelo;
+    }
+
+    $("#btnActualizarAlumno").click(function () {
+        var model = modeloAlumno();
+        $.ajax(
+            {
+                cache: false,
+                type: 'POST',
+                url: '@Url.Action("ActualizarAlumno", "Alumno")',
+                data: model,
+                success: function (data) {
+                    alert("Alumnno modificado");
+                    //$("#divListaArticulo").html('');
+                    //$("#divListaArticulo").html(data);
+                    //$("#btnCerrarModalCliente").click();
+                    //$("#btnConsultar").click();
+                },
+                error: function (xhr) {
+                    alert(xhr);
+                    return false;
+                }
+            });
+    });
+
+</script>
